@@ -1,20 +1,30 @@
 """This module contains the main interfaces to the API."""
 
-from .models import NgenicBase
-from .models import Tune
-from .models import Room
-from .const import API_PATH
-from .const import API_URL
-from .exceptions import ApiException, ClientException
-
-import logging
 import json
+import logging
+import ssl
+
 import httpx
+
+from .const import API_PATH, API_URL
+from .exceptions import ApiException, ClientException
+from .models import NgenicBase, Room, Tune
 
 LOG = logging.getLogger(__package__)
 
 # 30sec for connect, 10sec elsewhere.
 timeout = httpx.Timeout(10.0, connect=20.0)
+
+
+def _create_local_ssl_context() -> ssl.SSLContext:
+    """Create SSL context."""
+
+    return ssl.create_default_context()
+
+
+# The default SSLContext objects are created at import time
+SSL_CONTEXT_LOCAL_API = _create_local_ssl_context()
+
 
 class BaseClient(NgenicBase):
     def __init(self, session):
@@ -67,7 +77,8 @@ class BaseClient(NgenicBase):
         """
         url = API_PATH["tunes"].format(tuneUuid=tuneUuid)
         return self._async_parse_new_instance(url, Tune)
-    
+
+
 class Ngenic(BaseClient):
     def __init__(self, token):
         """Initialize an ngenic object.
@@ -82,7 +93,11 @@ class Ngenic(BaseClient):
         # this header will be added to each HTTP request
         self._auth_headers = {"Authorization": "Bearer %s" % self._token}
 
-        session = httpx.Client(headers=self._auth_headers, timeout=timeout) 
+        session = httpx.Client(
+            headers=self._auth_headers,
+            timeout=timeout,
+            verify=SSL_CONTEXT_LOCAL_API,
+        )
 
         # initializing this doesn't require a session or json
         super(Ngenic, self).__init__(session=session)
@@ -96,6 +111,7 @@ class Ngenic(BaseClient):
     def close(self):
         """Close the session if it was not created as a context manager"""
         self._session.close()
+
 
 class AsyncNgenic(BaseClient):
     def __init__(self, token):
@@ -111,7 +127,11 @@ class AsyncNgenic(BaseClient):
         # this header will be added to each HTTP request
         self._auth_headers = {"Authorization": "Bearer %s" % self._token}
 
-        session = httpx.AsyncClient(headers=self._auth_headers, timeout=timeout) 
+        session = httpx.AsyncClient(
+            headers=self._auth_headers,
+            timeout=timeout,
+            verify=SSL_CONTEXT_LOCAL_API,
+        )
 
         # initializing this doesn't require a session or json
         super(AsyncNgenic, self).__init__(session=session)
