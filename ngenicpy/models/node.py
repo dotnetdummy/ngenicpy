@@ -182,3 +182,21 @@ class Node(NgenicBase):
             if status_obj["nodeUuid"] == self.uuid():
                 return self._new_instance(NodeStatus, status_obj, node=self)
         return None
+    
+    async def async_status(self):
+        """Get status about this Node
+        There are no API for getting the status for a single node, so we
+        will use the list API and find our node in there.
+
+        :return:
+            a status object or None if Node doesn't support status
+        :rtype:
+            `~ngenic.models.node_status.NodeStatus`
+        """
+        url = API_PATH["node_status"].format(tuneUuid=self._parentTune.uuid())
+        rsp_json = self._parse(await self._async_get(url))
+
+        for status_obj in rsp_json:
+            if status_obj["nodeUuid"] == self.uuid():
+                return self._new_instance(NodeStatus, status_obj, node=self)
+        return None
