@@ -15,6 +15,8 @@ class MeasurementType(Enum):
     FLOW = "flow_litre_per_hour"
     INLET_FLOW_TEMPERATURE = "inlet_flow_temperature_C"
     RETURN_TEMPERATURE = "return_temperature_C"
+    PROCESS_VALUE = "process_value_C"
+    SETPOINT_VALUE = "setpoint_value_C"
 
     @classmethod
     def _missing_(cls, value):
