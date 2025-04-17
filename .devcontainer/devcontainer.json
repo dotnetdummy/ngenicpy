@@ -1,0 +1,56 @@
+{
+    "name": "ngenicpy development environment",
+    "dockerComposeFile": "./docker-compose.yml",
+    "service": "ngenicpy-env",
+    "runServices": ["ngenicpy-env"],
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "4gb",
+        "storage": "30gb"
+    },
+    "shutdownAction": "none",
+    "workspaceFolder": "/devcontainer",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "ms-python.python",
+                "ms-python.pylint",
+                "ms-python.vscode-pylance",
+                "visualstudioexptteam.vscodeintellicode",
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode",
+                "GitHub.vscode-pull-request-github",
+                "GitHub.copilot",
+                "Postman.postman-for-vscode",
+                "eamodio.gitlens",
+                "GitHub.github-vscode-theme",
+                "usernamehw.errorlens",
+                "ms-azuretools.vscode-docker",
+                "pamaron.pytest-runner"
+            ],
+            "settings": {
+                "python.interpreter.infoVisibility": "always",
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.experiments.optOutFrom": ["pythonTestAdapter"],
+                "python.locator": "js",
+                "python.pythonPath": "/home/vscode/.local/ha-venv/bin/python",
+                "python.terminal.activateEnvInCurrentTerminal": true,
+                "pylint.importStrategy": "fromEnvironment",
+                "python.testing.pytestArgs": [],
+                "python.testing.unittestEnabled": false,
+                "python.testing.pytestEnabled": true,
+                "pytest_runner.check_config": true,
+                "editor.formatOnPaste": false,
+                "editor.formatOnSave": true,
+                "editor.formatOnType": true,
+                "files.trimTrailingWhitespace": true,
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff"
+                }
+            }
+        }
+    },
+    "initializeCommand": "echo 'Welcome to the ngenicpy development environment!'",
+    "privileged": true
+}

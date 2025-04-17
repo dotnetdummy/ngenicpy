@@ -1,0 +1,24 @@
+version: "3"
+
+volumes:
+    ngenicpy-env-shell-history:
+
+services:
+    ngenicpy-env:
+        profiles:
+            - development
+        platform: linux/amd64
+        build:
+            context: .
+            dockerfile: Dockerfile
+            additional_contexts:
+                user: ~/
+        volumes:
+            - /var/run/docker.sock:/var/run/docker-host.sock
+            - ngenicpy-env-shell-history:/commandhistory
+            - ../:/devcontainer
+            - ~/.ssh/:/home/vscode/.ssh
+
+        # Overrides default command so things don't shut down after the process ends.
+        command: /bin/zsh -c "while sleep 1000; do :; done"
+        env_file: devcontainer.env
