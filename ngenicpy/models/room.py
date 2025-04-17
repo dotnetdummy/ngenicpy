@@ -1,23 +1,36 @@
-import json
+"""Room model for Ngenic Tune API."""
+
+from typing import Any
+
+import httpx
+
+from ..const import API_PATH  # noqa: TID252
 from .base import NgenicBase
-from ..const import API_PATH
+
 
 class Room(NgenicBase):
-    def __init__(self, session, json, tune):
-        self._parentTune = tune
+    """Ngenic API room model."""
 
-        super(Room, self).__init__(session=session, json=json)
+    def __init__(
+        self, session: httpx.AsyncClient, json_data: dict[str, Any], tune_uuid: str
+    ) -> None:
+        """Initialize the room model."""
+        self._parent_tune_uuid = tune_uuid
 
-    def update(self):
-        """Update this room with its current values"""
-        roomUuid = self["uuid"]
+        super().__init__(session=session, json_data=json_data)
 
-        url = API_PATH["rooms"].format(tuneUuid=self._parentTune.uuid(), roomUuid=roomUuid)
+    def update(self) -> None:
+        """Update this room with its current values."""
+
+        url = API_PATH["rooms"].format(
+            tune_uuid=self._parent_tune_uuid, room_uuid=self.uuid()
+        )
         self._put(url, data=self.json())
 
-    async def async_update(self):
-        """Update this room with its current values (async)"""
-        roomUuid = self["uuid"]
+    async def async_update(self) -> None:
+        """Update this room with its current values (async)."""
 
-        url = API_PATH["rooms"].format(tuneUuid=self._parentTune.uuid(), roomUuid=roomUuid)
+        url = API_PATH["rooms"].format(
+            tune_uuid=self._parent_tune_uuid, room_uuid=self.uuid()
+        )
         await self._async_put(url, data=self.json())

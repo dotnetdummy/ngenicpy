@@ -1,4 +1,5 @@
 # Ngenic Tune Python API Wrapper
+
 This python package simplifies access to the Ngenic Tune API.
 It can be used for viewing or edit your Tune configuration.
 
@@ -7,15 +8,19 @@ Both sync and async APIs are provided - async APIs are prefixed with `async_`.
 **NOTE**: This API wrapper is not yet finished, and only implements a subset of all the APIs. The interface may very well change.
 
 ## Prerequisite
+
 ### Obtain an API token
+
 An API token may be obtained here: https://developer.ngenic.se/
 
 ## Installation
+
 ```
 $ pip install ngenicpy
 ```
 
 ## Example
+
 ```python
 import json
 
@@ -28,7 +33,7 @@ except NgenicException as e:
         print(str(e))
 finally:
     ngenic.close()
-    
+
 # as context manager
 with Ngenic(token="YOUR-API-TOKEN") as ngenic:
     tunes = ngenic.tunes()
@@ -54,7 +59,7 @@ with Ngenic(token="YOUR-API-TOKEN") as ngenic:
         )
 
     # Update a room
-    room = tune.room(roomUuid="ROOM-UUID")
+    room = tune.room(room_uuid="ROOM-UUID")
     room["name"] = "Livingroom"
     room.update()
 
@@ -88,6 +93,7 @@ with Ngenic(token="YOUR-API-TOKEN") as ngenic:
 ```
 
 Async example
+
 ```python
 import json
 
@@ -106,4 +112,5 @@ async with AsyncNgenic(token="YOUR-API-TOKEN") as ngenic:
 ```
 
 ## Reference
+
 [Ngenic Tune Public API](https://developer.ngenic.se/)

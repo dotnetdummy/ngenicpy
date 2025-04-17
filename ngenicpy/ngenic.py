@@ -1,76 +1,79 @@
 """This module contains the main interfaces to the API."""
 
-from .models import NgenicBase
-from .models import Tune
-from .models import Room
-from .const import API_PATH
-from .const import API_URL
-from .exceptions import ApiException, ClientException
-
-import logging
-import json
 import httpx
 
-LOG = logging.getLogger(__package__)
+from .const import API_PATH
+from .models import NgenicBase, Tune
 
 # 30sec for connect, 10sec elsewhere.
 timeout = httpx.Timeout(10.0, connect=20.0)
 
-class BaseClient(NgenicBase):
-    def __init(self, session):
-        super(BaseClient, self).__init__(session=session)
 
-    def tunes(self):
+class BaseClient(NgenicBase):
+    """Base class for the Ngenic API client."""
+
+    def tunes(self, invalidate_cache: bool = False):
         """Fetch all tunes
 
+        :param bool invalidate_cache:
+            (optional) if the cache should be invalidated or not
         :return:
             a list of tunes
         :rtype:
             `list(~ngenic.models.tune.Tune)`
         """
-        url = API_PATH["tunes"].format(tuneUuid="")
-        return self._parse_new_instance(url, Tune)
+        url = API_PATH["tunes"].format(tune_uuid="")
+        return self._parse_new_instance(url, Tune, invalidate_cache)
 
-    async def async_tunes(self):
+    async def async_tunes(self, invalidate_cache: bool = False) -> list[Tune]:
         """Fetch all tunes (async)
 
+        :param bool invalidate_cache:
+            (optional) if the cache should be invalidated or not
         :return:
             a list of tunes
         :rtype:
             `list(~ngenic.models.tune.Tune)`
         """
-        url = API_PATH["tunes"].format(tuneUuid="")
-        return await self._async_parse_new_instance(url, Tune)
+        url = API_PATH["tunes"].format(tune_uuid="")
+        return await self._async_parse_new_instance(url, Tune, invalidate_cache)
 
-    def tune(self, tuneUuid):
+    def tune(self, tune_uuid: str, invalidate_cache: bool = False) -> Tune:
         """Fetch a single tune
 
-        :param str tuneUUid:
+        :param bool invalidate_cache:
+            (optional) if the cache should be invalidated or not
+        :param str tune_uuid:
             (required) tune UUID
         :return:
             the tune
         :rtype:
             `~ngenic.models.tune.Tune`
         """
-        url = API_PATH["tunes"].format(tuneUuid=tuneUuid)
-        return self._parse_new_instance(url, Tune)
+        url = API_PATH["tunes"].format(tune_uuid=tune_uuid)
+        return self._parse_new_instance(url, Tune, invalidate_cache)
 
-    def async_tune(self, tuneUuid):
+    def async_tune(self, tune_uuid: str, invalidate_cache: bool = False) -> Tune:
         """Fetch a single tune
 
-        :param str tuneUUid:
+        :param bool invalidate_cache:
+            (optional) if the cache should be invalidated or not
+        :param str tune_uuid:
             (required) tune UUID
         :return:
             the tune
         :rtype:
             `~ngenic.models.tune.Tune`
         """
-        url = API_PATH["tunes"].format(tuneUuid=tuneUuid)
-        return self._async_parse_new_instance(url, Tune)
-    
+        url = API_PATH["tunes"].format(tune_uuid=tune_uuid)
+        return self._async_parse_new_instance(url, Tune, invalidate_cache)
+
+
 class Ngenic(BaseClient):
+    """Ngenic API client."""
+
     def __init__(self, token):
-        """Initialize an ngenic object.
+        """Initialize the client.
 
         :param token:
             (required) OAuth2 bearer token
@@ -80,9 +83,9 @@ class Ngenic(BaseClient):
         self._token = token
 
         # this header will be added to each HTTP request
-        self._auth_headers = {"Authorization": "Bearer %s" % self._token}
+        self._auth_headers = {"Authorization": f"Bearer {self._token}"}
 
-        session = httpx.Client(headers=self._auth_headers, timeout=timeout) 
+        session = httpx.Client(headers=self._auth_headers, timeout=timeout)
 
         # initializing this doesn't require a session or json
         super(Ngenic, self).__init__(session=session)
@@ -97,9 +100,12 @@ class Ngenic(BaseClient):
         """Close the session if it was not created as a context manager"""
         self._session.close()
 
+
 class AsyncNgenic(BaseClient):
+    """Ngenic API client (async)."""
+
     def __init__(self, token):
-        """Initialize an async ngenic object.
+        """Initialize the async client.
 
         :param token:
             (required) OAuth2 bearer token
@@ -109,9 +115,9 @@ class AsyncNgenic(BaseClient):
         self._token = token
 
         # this header will be added to each HTTP request
-        self._auth_headers = {"Authorization": "Bearer %s" % self._token}
+        self._auth_headers = {"Authorization": f"Bearer {self._token}"}
 
-        session = httpx.AsyncClient(headers=self._auth_headers, timeout=timeout) 
+        session = httpx.AsyncClient(headers=self._auth_headers, timeout=timeout)
 
         # initializing this doesn't require a session or json
         super(AsyncNgenic, self).__init__(session=session)

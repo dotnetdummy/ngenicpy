@@ -1,13 +1,18 @@
+"""Exceptions for ngenicpy."""
+
+
 class NgenicException(Exception):
-    """Base exception class"""
-    pass
+    """Base exception class."""
+
 
 class ApiException(NgenicException):
-    """Exception from ngenic API"""
+    """Exception from ngenic API."""
+
 
 class ClientException(NgenicException):
-    """Exception from library"""
+    """Exception from library."""
 
-    def __init__(self, msg, cause=None):
-        super(ClientException, self).__init__(self, msg)
+    def __init__(self, msg: str) -> None:
+        """Initialize the exception."""
+        super().__init__(self, msg)
         self.msg = msg

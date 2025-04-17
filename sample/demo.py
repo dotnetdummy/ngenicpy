@@ -1,3 +1,5 @@
+"""This is a sample script to show how to use the Ngenic API."""
+
 import os
 
 from ngenicpy import Ngenic
@@ -6,9 +8,11 @@ from ngenicpy.models.node import Node
 from ngenicpy.models.node_status import NodeStatus
 from ngenicpy.models.tune import Tune
 
+
 def main():
-    token = os.environ['NGENIC_TOKEN']
-    
+    """Main function to demonstrate the Ngenic API usage."""
+    token = os.environ["NGENIC_TOKEN"]
+
     if not token:
         print("Set NGENIC_TOKEN as a environment var")
         exit(1)
@@ -16,31 +20,19 @@ def main():
     with Ngenic(token=token) as ngenic:
         tunes: list[Tune] = ngenic.tunes()
         for tune in tunes:
-            print("Tune %s, Name: %s, Tune Name: %s" %
-                    (
-                        tune.uuid(),
-                        tune["name"],
-                        tune["tuneName"]
-                    )
+            print(
+                f"Tune {tune.uuid()}, Name: {tune['name']}, Tune Name: {tune['tuneName']}"
             )
 
             nodes: list[Node] = tune.nodes()
             for node in nodes:
                 node_status: NodeStatus = node.status()
 
-                print("\tNode %s, Type: %s" %
-                        (
-                            node.uuid(),
-                            node.get_type()
-                        )
-                )
+                print(f"\tNode {node.uuid()}, Type: {node.get_type()}")
 
                 if node_status:
-                    print("\t\tBattery: %s\n\t\tRadio Signal: %s" %
-                            (
-                                str(node_status.battery_percentage()),
-                                str(node_status.radio_signal_percentage())
-                            )
+                    print(
+                        f"\t\tBattery: {node_status.battery_percentage()}\n\t\tRadio Signal: {node_status.radio_signal_percentage()}"
                     )
 
                 measurements: Measurement = node.measurements()
@@ -48,13 +40,7 @@ def main():
                     print("\t\t(no measurements)")
 
                 for measurement in measurements:
-                    print("\t\t%s: %s" %
-                            (
-                                measurement.get_type(),
-                                measurement.json()
-                            )
-                    )
-
+                    print(f"\t\t{measurement.get_type()}: {measurement.json()}")
 
 
 if __name__ == "__main__":

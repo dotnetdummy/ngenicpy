@@ -1,11 +1,15 @@
-API_URL = "https://app.ngenic.se/api/v3"
+"""Constants for the NgenicPy library."""
 
-API_PATH = {
-  "tunes":                  "tunes/{tuneUuid}",
-  "rooms":                  "tunes/{tuneUuid}/rooms/{roomUuid}",
-  "nodes":                  "tunes/{tuneUuid}/gateway/nodes/{nodeUuid}",
-  "node_status":            "tunes/{tuneUuid}/nodestatus",
-  "measurements":           "tunes/{tuneUuid}/measurements/{nodeUuid}",
-  "measurements_types":     "tunes/{tuneUuid}/measurements/{nodeUuid}/types",
-  "measurements_latest":    "tunes/{tuneUuid}/measurements/{nodeUuid}/latest"
+from typing import Final
+
+API_URL: Final[str] = "https://app.ngenic.se/api/v3"
+
+API_PATH: Final[dict[str, str]] = {
+    "tunes": "tunes/{tune_uuid}",
+    "rooms": "tunes/{tune_uuid}/rooms/{room_uuid}",
+    "nodes": "tunes/{tune_uuid}/gateway/nodes/{node_uuid}",
+    "node_status": "tunes/{tune_uuid}/nodestatus",
+    "measurements": "tunes/{tune_uuid}/measurements/{node_uuid}",
+    "measurements_types": "tunes/{tune_uuid}/measurements/{node_uuid}/types",
+    "measurements_latest": "tunes/{tune_uuid}/measurements/{node_uuid}/latest",
 }

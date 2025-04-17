@@ -1,7 +1,10 @@
-from .mock_base import MockBase
+"""Tune mock class."""
+
 from ngenicpy.models import Tune
 
-test_json = """
+from .mock_base import MockBase
+
+TEST_JSON = """
 {
     "isInstalled": true,
     "isNetworkConnected": true,
@@ -12,6 +15,10 @@ test_json = """
     "userName": "johanna.johansson@example.domain"
 }
 """
+
+
 class MockTune(MockBase):
+    """Mock class for testing Tune API responses."""
+
     def __init__(self):
-        super(MockTune, self).__init__(Tune, test_json)
+        super(MockTune, self).__init__(Tune, TEST_JSON)
