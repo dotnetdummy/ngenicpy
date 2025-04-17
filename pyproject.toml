@@ -18,9 +18,11 @@ description = "Python package for simple access to Ngenic Tune API."
 readme = "README.md"
 license = "MIT"
 keywords = ["ngenic", "hass", "integration", "sdk", "api"]
+classifiers = ['Programming Language :: Python :: 3', 'Operating System :: OS Independent']
 
 [project.urls]
 Homepage = "https://github.com/dotnetdummy/ngenicpy"
 Documentation = "https://github.com/dotnetdummy/ngenicpy"
 Repository = "https://github.com/dotnetdummy/ngenicpy.git"
 Issues = "https://github.com/dotnetdummy/ngenicpy/issues"
+Changelog = "https://github.com/dotnetdummy/ngenicpy/releases"

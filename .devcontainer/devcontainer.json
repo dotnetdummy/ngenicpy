@@ -27,7 +27,8 @@
                 "GitHub.github-vscode-theme",
                 "usernamehw.errorlens",
                 "ms-azuretools.vscode-docker",
-                "pamaron.pytest-runner"
+                "pamaron.pytest-runner",
+                "github.vscode-github-actions"
             ],
             "settings": {
                 "python.interpreter.infoVisibility": "always",
