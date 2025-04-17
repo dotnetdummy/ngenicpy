@@ -163,3 +163,61 @@ class Tune(NgenicBase):
         return await self._async_parse_new_instance(
             url, Node, invalidate_cache, tune_uuid=self.uuid()
         )
+
+    def setpoint_schedule(
+        self, name: str, invalidate_cache: bool = False
+    ) -> SetpointSchedule:
+        """Fetch the setpoint schedule.
+
+        :param str name:
+            name of the setpoint schedule
+        :param bool invalidate_cache:
+            if the cache should be invalidated or not (default: False)
+        :return:
+            the setpoint schedule
+        :rtype:
+            `~ngenic.models.setpoint_schedule.SetPointSchedule`
+        """
+
+        url = API_PATH["setpoint_schedules"].format(tune_uuid=self.uuid())
+        rsp_json = self._parse(self._get(url, invalidate_cache))
+
+        for obj in rsp_json:
+            if obj["name"] == name:
+                return self._new_instance(SetpointSchedule, obj, tune_uuid=self.uuid())
+
+        new_json = {
+            "name": name,
+            "autoTune": True,
+            "lowestSetpoint": 12,
+        }
+        return self._new_instance(SetpointSchedule, new_json, tune_uuid=self.uuid())
+
+    async def async_setpoint_schedule(
+        self, name: str, invalidate_cache: bool = False
+    ) -> SetpointSchedule:
+        """Fetch the setpoint schedule (async).
+
+        :param str name:
+            name of the setpoint schedule
+        :param bool invalidate_cache:
+            if the cache should be invalidated or not (default: False)
+        :return:
+            the setpoint schedule
+        :rtype:
+            `~ngenic.models.setpoint_schedule.SetPointSchedule`
+        """
+
+        url = API_PATH["setpoint_schedules"].format(tune_uuid=self.uuid())
+        rsp_json = self._parse(await self._async_get(url, invalidate_cache))
+
+        for obj in rsp_json:
+            if obj["name"] == name:
+                return self._new_instance(SetpointSchedule, obj, tune_uuid=self.uuid())
+
+        new_json = {
+            "name": name,
+            "autoTune": True,
+            "lowestSetpoint": 12,
+        }
+        return self._new_instance(SetpointSchedule, new_json, tune_uuid=self.uuid())

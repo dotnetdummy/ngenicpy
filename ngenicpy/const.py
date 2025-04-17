@@ -12,4 +12,5 @@ API_PATH: Final[dict[str, str]] = {
     "measurements": "tunes/{tune_uuid}/measurements/{node_uuid}",
     "measurements_types": "tunes/{tune_uuid}/measurements/{node_uuid}/types",
     "measurements_latest": "tunes/{tune_uuid}/measurements/{node_uuid}/latest",
+    "setpoint_schedules": "tunes/{tune_uuid}/setpointschedules",
 }
