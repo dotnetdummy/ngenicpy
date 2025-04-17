@@ -17,6 +17,15 @@ except ImportError:
     from time import time as monotonic
 
 
+"""
+    Note that Tune system Nodes generally report data in intervals of five minutes,
+    so there is no point in polling the API for new data at a higher rate.
+
+    Referencing "Rate Limiting" in the Ngenic API documentation: https://developer.ngenic.se/#introduction
+"""
+CACHE_INTERVAL = 5.0 * 60
+
+
 class NgenicBase:
     """Superclass for all models."""
 
@@ -321,7 +330,7 @@ class NgenicBase:
 
         result = self._request("get", req_url)
 
-        expiration = now + 5.0
+        expiration = now + CACHE_INTERVAL
         self._cache[cache_key] = expiration, result
 
         return result
@@ -342,7 +351,7 @@ class NgenicBase:
 
         result = await self._async_request("get", url, False)
 
-        expiration = now + 5.0
+        expiration = now + CACHE_INTERVAL
         self._cache[cache_key] = expiration, result
 
         return result
