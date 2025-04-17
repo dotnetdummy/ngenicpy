@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=78", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ngenicpy"
+version = "0.4.0"
+dependencies = ["httpx>=0.28.1"]
+requires-python = ">= 3.12"
+authors = [
+  {name = "Carl Ripa", email = "cj.ripa@gmail.com"},
+  {name = "Simon Falkman", email = "sfalkman@gmail.com"},
+]
+maintainers = [
+  {name = "Carl Ripa", email = "cj.ripa@gmail.com"}
+]
+description = "Python package for simple access to Ngenic Tune API."
+readme = "README.md"
+license = "MIT"
+keywords = ["ngenic", "hass", "integration", "sdk", "api"]
+
+[project.urls]
+Homepage = "https://github.com/dotnetdummy/ngenicpy"
+Documentation = "https://github.com/dotnetdummy/ngenicpy"
+Repository = "https://github.com/dotnetdummy/ngenicpy.git"
+Issues = "https://github.com/dotnetdummy/ngenicpy/issues"
