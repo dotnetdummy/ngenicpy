@@ -7,7 +7,7 @@ py-modules = ["ngenicpy"]
 
 [project]
 name = "ngenicpy"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = ["httpx>=0.28.1"]
 requires-python = ">= 3.12"
 authors = [
