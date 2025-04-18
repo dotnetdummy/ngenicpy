@@ -96,7 +96,7 @@ class SetpointSchedule(NgenicBase):
         self["endTime"] = end_time.astimezone(UTC).isoformat()
 
     def update(self) -> None:
-        """Update this schedule with its current values (async)."""
+        """Update this schedule with its current values."""
 
         url = API_PATH["setpoint_schedules"].format(tune_uuid=self._parent_tune_uuid)
 
