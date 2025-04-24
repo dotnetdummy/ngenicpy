@@ -195,8 +195,10 @@ class Node(NgenicBase):
         measurement_types = self.measurement_types(invalidate_cache)
 
         # remove types that doesn't support reading from latest API
-        if MeasurementType.ENERGY_KWH in measurement_types:
-            measurement_types.remove(MeasurementType.ENERGY_KWH)
+        if MeasurementType.ENERGY in measurement_types:
+            measurement_types.remove(MeasurementType.ENERGY)
+        if MeasurementType.PRODUCED_ENERGY in measurement_types:
+            measurement_types.remove(MeasurementType.PRODUCED_ENERGY)
 
         if len(measurement_types) == 0:
             return []
@@ -228,8 +230,10 @@ class Node(NgenicBase):
         measurement_types = await self.async_measurement_types(invalidate_cache)
 
         # remove types that doesn't support reading from latest API
-        if MeasurementType.ENERGY_KWH in measurement_types:
-            measurement_types.remove(MeasurementType.ENERGY_KWH)
+        if MeasurementType.ENERGY in measurement_types:
+            measurement_types.remove(MeasurementType.ENERGY)
+        if MeasurementType.PRODUCED_ENERGY in measurement_types:
+            measurement_types.remove(MeasurementType.PRODUCED_ENERGY)
 
         if len(measurement_types) == 0:
             return []
