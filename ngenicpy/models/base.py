@@ -274,15 +274,15 @@ class NgenicBase:
     def _get_error(
         self, msg: str, res: httpx.Response, parent_ex: Exception | None = None
     ):
+        server_msg: str = None
         if res is not None and res.status_code == 429:
-            # Too many requests
             server_msg = f"Too many requests have been made, retry again after {res.headers['X-RateLimit-Reset']}"
         else:
             try:
                 server_msg = res.json()["message"]
             except Exception:  # pylint: disable=broad-except
                 if res is not None:
-                    server_msg = str(res.status_code)
+                    server_msg = f"{res.status_code} {res.reason_phrase}, {res.text}"
                 elif parent_ex is not None:
                     if isinstance(parent_ex, httpx.ConnectTimeout):
                         server_msg = "Timed out connecting to ngenic server"
@@ -292,6 +292,12 @@ class NgenicBase:
                         server_msg = str(parent_ex)
                 else:
                     server_msg = "Unknown error"
+
+        if server_msg is None or server_msg == "":
+            if res is not None:
+                server_msg = f"{res.status_code} {res.reason_phrase}, {res.text}"
+            else:
+                server_msg = "Unknown error"
 
         return f"{msg}: {server_msg}"
 
