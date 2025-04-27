@@ -272,7 +272,10 @@ class NgenicBase:
             ) from exc
 
     def _get_error(
-        self, msg: str, res: httpx.Response, parent_ex: Exception | None = None
+        self,
+        msg: str,
+        res: httpx.Response | None = None,
+        parent_ex: Exception | None = None,
     ):
         server_msg: str = None
         if res is not None and res.status_code == 429:
@@ -281,21 +284,18 @@ class NgenicBase:
             try:
                 server_msg = res.json()["message"]
             except Exception:  # pylint: disable=broad-except
-                if res is not None:
-                    server_msg = f"{res.status_code} {res.reason_phrase}, {res.text}"
-                elif parent_ex is not None:
-                    if isinstance(parent_ex, httpx.ConnectTimeout):
-                        server_msg = "Timed out connecting to ngenic server"
-                    elif isinstance(parent_ex, httpx.ConnectTimeout):
-                        server_msg = "Timed out sending request to ngenic server"
-                    else:
-                        server_msg = str(parent_ex)
-                else:
-                    server_msg = "Unknown error"
+                server_msg = None
 
         if server_msg is None or server_msg == "":
             if res is not None:
                 server_msg = f"{res.status_code} {res.reason_phrase}, {res.text}"
+            elif parent_ex is not None:
+                if isinstance(parent_ex, httpx.ConnectTimeout):
+                    server_msg = (
+                        "Connection timed out when sending request to Ngenic API"
+                    )
+                else:
+                    server_msg = str(parent_ex)
             else:
                 server_msg = "Unknown error"
 

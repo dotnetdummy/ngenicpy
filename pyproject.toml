@@ -11,7 +11,7 @@ exclude = [
 
 [project]
 name = "ngenicpy"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = ["httpx>=0.28.1"]
 requires-python = ">= 3.12"
 authors = [
